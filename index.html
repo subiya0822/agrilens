@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriLens - Plant Disease Detector</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌿 AgriLens</h1>
+            <p>Plant Disease Detection System</p>
+        </header>
+
+        <div class="upload-section">
+            <div class="image-preview" id="imagePreview">
+                <span>No image selected</span>
+            </div>
+            
+            <div class="buttons">
+                <input type="file" id="imageInput" accept="image/*" hidden>
+                <button onclick="document.getElementById('imageInput').click()">
+                    📁 Upload from Gallery
+                </button>
+                <button onclick="openCamera()">📷 Open Camera</button>
+            </div>
+
+            <!-- Camera Section -->
+            <div class="camera-section" id="cameraSection" style="display: none;">
+                <video id="cameraVideo" autoplay playsinline></video>
+                <canvas id="cameraCanvas" style="display: none;"></canvas>
+                <div class="camera-buttons">
+                    <button onclick="capturePhoto()">📸 Capture Photo</button>
+                    <button onclick="closeCamera()" class="cancel-btn">❌ Close Camera</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="results" id="results" style="display: none;">
+            <!-- Results will be inserted here by JavaScript -->
+        </div>
+
+        <div class="loading" id="loading" style="display: none;">
+            Analyzing plant image...
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
