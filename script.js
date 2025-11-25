@@ -1,8 +1,8 @@
 // =====================
-// AgriLens – Leaf-Only (Tomato & Potato focused)
+// AgriLens – Leaf-Only (Tomato & Potato) + Taxonomy
 // =====================
 
-// Disease data: only leaf-related
+// Disease data: only leaf-related + taxonomy
 const diseaseData = {
     // Healthy leaves
     "Healthy Tomato Leaf": {
@@ -10,6 +10,12 @@ const diseaseData = {
         status: "healthy",
         plantType: "tomato",
         part: "leaf",
+        taxonomy: {
+            family: "Solanaceae",
+            genus: "Solanum",
+            species: "Solanum lycopersicum",
+            order: "Solanales"
+        },
         treatments: {
             organic: "Maintain regular watering, good sunlight, and balanced fertilizer for tomato plants.",
             chemical: "No chemical treatment needed for healthy tomato leaves."
@@ -20,6 +26,12 @@ const diseaseData = {
         status: "healthy",
         plantType: "potato",
         part: "leaf",
+        taxonomy: {
+            family: "Solanaceae",
+            genus: "Solanum",
+            species: "Solanum tuberosum",
+            order: "Solanales"
+        },
         treatments: {
             organic: "Keep soil slightly moist, avoid waterlogging, and monitor potato leaves regularly.",
             chemical: "No chemical treatment needed for healthy potato leaves."
@@ -30,6 +42,7 @@ const diseaseData = {
         status: "healthy",
         plantType: "unknown",
         part: "leaf",
+        taxonomy: null,
         treatments: {
             organic: "Leaf appears healthy. Maintain proper watering, sunlight, and nutrition.",
             chemical: "No chemical treatment needed for healthy leaves."
@@ -42,6 +55,12 @@ const diseaseData = {
         status: "diseased",
         plantType: "tomato",
         part: "leaf",
+        taxonomy: {
+            family: "Solanaceae",
+            genus: "Solanum",
+            species: "Solanum lycopersicum",
+            order: "Solanales"
+        },
         treatments: {
             organic: "Remove infected leaves, avoid overhead watering, and spray neem oil or compost tea.",
             chemical: "Use chlorothalonil or copper-based fungicides as per label instructions."
@@ -52,6 +71,12 @@ const diseaseData = {
         status: "diseased",
         plantType: "tomato",
         part: "leaf",
+        taxonomy: {
+            family: "Solanaceae",
+            genus: "Solanum",
+            species: "Solanum lycopersicum",
+            order: "Solanales"
+        },
         treatments: {
             organic: "Remove and destroy infected leaves, improve air circulation, and avoid wet foliage.",
             chemical: "Use systemic fungicides such as those containing metalaxyl, following local guidelines."
@@ -64,6 +89,12 @@ const diseaseData = {
         status: "diseased",
         plantType: "potato",
         part: "leaf",
+        taxonomy: {
+            family: "Solanaceae",
+            genus: "Solanum",
+            species: "Solanum tuberosum",
+            order: "Solanales"
+        },
         treatments: {
             organic: "Remove affected leaves, rotate crops, and apply neem oil or copper sprays.",
             chemical: "Use mancozeb or chlorothalonil fungicides as per label instructions."
@@ -74,6 +105,12 @@ const diseaseData = {
         status: "diseased",
         plantType: "potato",
         part: "leaf",
+        taxonomy: {
+            family: "Solanaceae",
+            genus: "Solanum",
+            species: "Solanum tuberosum",
+            order: "Solanales"
+        },
         treatments: {
             organic: "Destroy heavily infected plants, avoid water splash, and improve drainage.",
             chemical: "Use recommended fungicides for late blight, such as those containing cymoxanil or metalaxyl."
@@ -86,6 +123,7 @@ const diseaseData = {
         status: "diseased",
         plantType: "unknown",
         part: "leaf",
+        taxonomy: null,
         treatments: {
             organic: "Remove diseased leaves and dispose of them away from the field. Avoid wetting the foliage.",
             chemical: "Consult local agricultural experts for the correct fungicide for your crop."
@@ -98,6 +136,7 @@ const diseaseData = {
         status: "none",
         plantType: "none",
         part: "none",
+        taxonomy: null,
         treatments: {
             organic: "No clear leaf detected. Please capture a clear image of a single leaf with good lighting.",
             chemical: "No analysis available."
@@ -277,7 +316,7 @@ function analyzePlantCanvas(canvas) {
     const yellowRatio = yellowColors / totalPixels;
     const darkRatio = darkSpotColors / totalPixels;
 
-    // ✅ NEW: Strong rule for "no plant" (helps for empty hand / table / random background)
+    // Strong rule for "no plant" (helps for empty hand / table / random background)
     if (greenRatio < 0.02) {
         return {
             diseaseName: "No Plant Detected",
@@ -445,11 +484,27 @@ function displayResults(analysis) {
         organic: data.treatments.organic
     };
 
+    // Build taxonomy HTML if available
+    let taxonomyHTML = "";
+    if (data.taxonomy) {
+        taxonomyHTML = `
+            <div class="card">
+                <h3>Plant Taxonomy</h3>
+                <p><strong>Family:</strong> ${data.taxonomy.family}</p>
+                <p><strong>Genus:</strong> ${data.taxonomy.genus}</p>
+                <p><strong>Species:</strong> ${data.taxonomy.species}</p>
+                <p><strong>Order:</strong> ${data.taxonomy.order}</p>
+            </div>
+        `;
+    }
+
     resultsDiv.innerHTML = `
         <div class="card" style="border-left: 4px solid ${statusColor}">
             <h3>${statusEmoji} ${analysis.diseaseName} <span class="confidence">${confidencePercent}%</span></h3>
             <p><strong>Plant Part:</strong> ${analysis.part}</p>
         </div>
+
+        ${taxonomyHTML}
 
         <div class="card">
             <h3>Treatment Recommendations</h3>
